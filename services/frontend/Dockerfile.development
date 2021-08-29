@@ -1,0 +1,15 @@
+FROM node:13.12.0-alpine
+
+# set working directory
+WORKDIR home/user/IdeaProjects/docker/services/frontend
+
+# add `/frontend/node_modules/.bin` to $PATH
+
+
+# install app dependencies
+COPY ./ ./
+RUN npm install --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+
+# start app
+CMD ["npm", "start"]

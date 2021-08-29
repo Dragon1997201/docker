@@ -1,0 +1,7 @@
+FROM bellsoft/liberica-openjdk-alpine-musl:11.0.3
+VOLUME /tmp
+EXPOSE 8080
+WORKDIR /home/user/IdeaProjects/docker/services/javaapp
+ARG JAR_FILE=javaapp.jar
+ADD ${JAR_FILE} javaapp.jar
+CMD java -jar javaapp.jar 

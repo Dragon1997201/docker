@@ -1,0 +1,51 @@
+version: '3.3'
+
+services:
+  postgres:
+    container_name: postgres
+    build:
+      context: services/postgres
+      dockerfile: Dockerfile.development
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=weather_datas
+      - POSTGRES_PASSWORD=0000
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      
+
+    
+  javaapp:
+    build:
+      context: services/javaapp
+      dockerfile: Dockerfile.development
+    command: java -jar javaapp.jar
+    environment:
+      - PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres/weather_datas
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=0000
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - JS_URL=http://localhost:3000
+    image: 'my-java-application'
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    
+  frontend:
+    build:
+      context: services/frontend
+      dockerfile: Dockerfile.development
+    volumes:
+      - '.:/frontend'
+      - '/frontend/node_modules'
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      
+volumes:
+    db-data: {}  

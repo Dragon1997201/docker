@@ -1,0 +1,5 @@
+FROM postgres:12-alpine
+ADD init.sql /docker-entrypoint-initdb.d
+ADD setDB.sql /docker-entrypoint-initdb.d
+RUN chmod a+r /docker-entrypoint-initdb.d/*
+EXPOSE 5432
